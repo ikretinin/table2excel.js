@@ -57,7 +57,7 @@ export default class Table2Excel {
         let count = 0;
         tables.forEach((table, index) => {
             if (this.names[0] === undefined) {
-                const worksheet = workbook.addWorksheet(`Sheet ${index + 1}`)
+                const worksheet = workbook.addWorksheet(`Keet ${index + 1}`)
             } else {
                 const worksheet = workbook.addWorksheet(this.names[count]);
             }
