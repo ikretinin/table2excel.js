@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/ikretinin/table2excel.js#readme",
   "dependencies": {
+    "exceljs": "^1.5.1",
     "file-saver": "^1.3.3"
   },
   "peerDependencies": {
