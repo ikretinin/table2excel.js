@@ -30,8 +30,9 @@ export default class Table2Excel {
             if (t.length > 31) {
                 t = t.slice(30);
             }
+            console.log(t, t.slice(30));
         });
-        console.log(names);
+        //console.log(names);
         this.names = names;
         
         this.options = Object.assign({}, DEFAULT_OPTIONS, options)
