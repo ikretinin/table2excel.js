@@ -28,7 +28,7 @@ export default class Table2Excel {
 
         names.forEach(t => {
             if (t.length > 31) {
-                t = t.slice(31);
+                t = t.slice(30);
             }
         });
         this.names = names;
