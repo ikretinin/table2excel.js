@@ -26,7 +26,12 @@ export default class Table2Excel {
                 : selector
         )
 
-        this.names = names;
+        names.forEach(t => {
+            if (t.length > 31) {
+                t = t.slice(31);
+            }
+        });
+        
         this.options = Object.assign({}, DEFAULT_OPTIONS, options)
 
         // setup plugins
