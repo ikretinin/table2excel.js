@@ -58,9 +58,11 @@ export default class Table2Excel {
 
         tables.forEach((table, index) => {
             if (!!this.names) {
-                const worksheet = workbook.addWorksheet(`Sheet ${index + 1}`)
+                const worksheet = workbook.addWorksheet(`Sheet ${index + 1}`);
+                console.log('if: ', worksheet);
             } else {
                 const worksheet = workbook.addWorksheet(this.names[index])
+                console.log('else', worksheet);
             }
 
 
