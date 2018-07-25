@@ -156,9 +156,9 @@ export default class Table2Excel {
     }
 
     export(fileName, ext) {
-        //if (!this.workbook) {
-        //    this.toExcel()
-        //}
+        if (!this.workbook) {
+            this.toExcel()
+        }
         saveAsExcel(this.workbook, fileName, ext)
     }
 }
