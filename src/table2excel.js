@@ -19,7 +19,7 @@ const DEFAULT_OPTIONS = {
 
 export default class Table2Excel {
 
-  constructor (selector = 'table', options = {}) {
+  constructor (selector = 'table', options = {}, names = []) {
     this.tables = Array.from(
       typeof selector === 'string'
         ? document.querySelectorAll(selector)
@@ -46,7 +46,7 @@ export default class Table2Excel {
     this.plugins[func].forEach(handler => handler.call(this, this.pluginContext))
   }
 
-  toExcel () {
+    toExcel() {
     const { tables, options } = this
     const workbook = new ExcelJS.Workbook() // create workbook
 
@@ -55,8 +55,13 @@ export default class Table2Excel {
     // workbookCreated plugins
     this._invokePlugin('workbookCreated', { workbook, tables })
 
-    tables.forEach((table, index) => {
-      const worksheet = workbook.addWorksheet(`Keet ${index + 1}`)
+      tables.forEach((table, index) => {
+          if (names == []) {
+              const worksheet = workbook.addWorksheet(`Sheet ${index + 1}`)
+          } else {
+              const worksheet = workbook.addWorksheet(names[index])
+          }
+      
 
       // worksheetCreated plugins
       this._invokePlugin('worksheetCreated', { worksheet, table })
