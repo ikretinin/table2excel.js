@@ -57,11 +57,12 @@ export default class Table2Excel {
         this._invokePlugin('workbookCreated', { workbook, tables })
 
         tables.forEach((table, index) => {
+            let worksheet;
             if (!this.names) {
-                const worksheet = workbook.addWorksheet(`Sheet ${index + 1}`);
+                worksheet = workbook.addWorksheet(`Sheet ${index + 1}`);
                 console.log('if: ', worksheet);
             } else {
-                const worksheet = workbook.addWorksheet(this.names[index])
+                worksheet = workbook.addWorksheet(this.names[index])
                 console.log('else', worksheet);
             }
 
@@ -155,9 +156,9 @@ export default class Table2Excel {
     }
 
     export(fileName, ext) {
-        if (!this.workbook) {
-            this.toExcel()
-        }
+        //if (!this.workbook) {
+        //    this.toExcel()
+        //}
         saveAsExcel(this.workbook, fileName, ext)
     }
 }
