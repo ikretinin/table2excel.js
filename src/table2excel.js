@@ -60,10 +60,10 @@ export default class Table2Excel {
             let worksheet;
             if (!this.names) {
                 worksheet = workbook.addWorksheet(`Sheet ${index + 1}`);
-                console.log('if: ', worksheet);
+                //console.log('if: ', worksheet);
             } else {
                 worksheet = workbook.addWorksheet(this.names[index])
-                console.log('else', worksheet);
+                //console.log('else', worksheet);
             }
 
 
