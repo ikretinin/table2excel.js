@@ -28,7 +28,7 @@ export default class Table2Excel {
                 : selector
         )
 
-        let arr = new Array(string);
+        let arr = new Array();
 
         names.forEach(t => {
             if (t.length > 31) {
