@@ -19,6 +19,8 @@ const DEFAULT_OPTIONS = {
 
 export default class Table2Excel {
 
+    
+
     constructor(selector = 'table', options = {}, names = []) {
         this.tables = Array.from(
             typeof selector === 'string'
@@ -26,12 +28,16 @@ export default class Table2Excel {
                 : selector
         )
 
+        let arr = new Array(string);
+
         names.forEach(t => {
             if (t.length > 31) {
-                this.names.push = t.slice(0, 30);
+                arr.push = t.slice(0, 30);
             }
         });
-        
+
+        this.names = arr;
+
         this.options = Object.assign({}, DEFAULT_OPTIONS, options)
 
         // setup plugins
