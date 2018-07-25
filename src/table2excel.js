@@ -31,6 +31,7 @@ export default class Table2Excel {
                 t = t.slice(30);
             }
         });
+        console.log(names);
         this.names = names;
         
         this.options = Object.assign({}, DEFAULT_OPTIONS, options)
