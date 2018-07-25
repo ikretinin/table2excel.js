@@ -56,7 +56,7 @@ export default class Table2Excel {
     this._invokePlugin('workbookCreated', { workbook, tables })
 
       tables.forEach((table, index) => {
-          if (names == []) {
+          if (!!names) {
               const worksheet = workbook.addWorksheet(`Sheet ${index + 1}`)
           } else {
               const worksheet = workbook.addWorksheet(names[index])
