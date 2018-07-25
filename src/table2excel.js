@@ -28,12 +28,9 @@ export default class Table2Excel {
 
         names.forEach(t => {
             if (t.length > 31) {
-                t = t.slice(30);
+                this.names.push = t.slice(0, 30);
             }
-            console.log(t, t.slice(30));
         });
-        //console.log(names);
-        this.names = names;
         
         this.options = Object.assign({}, DEFAULT_OPTIONS, options)
 
