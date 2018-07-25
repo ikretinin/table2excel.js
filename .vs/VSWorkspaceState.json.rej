@@ -1,0 +1,10 @@
+diff a/.vs/VSWorkspaceState.json b/.vs/VSWorkspaceState.json	(rejected hunks)
+@@ -4,6 +4,6 @@
+     "\\src",
+     "\\src\\plugins"
+   ],
+-  "SelectedNode": "\\docs",
++  "SelectedNode": "\\src\\table2excel.js",
+   "PreviewInSolutionExplorer": false
+ }
+\ No newline at end of file
