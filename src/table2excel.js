@@ -29,8 +29,6 @@ export default class Table2Excel {
         )
 
         this.names = names;
-        this.cut(this.names);
-        console.log('names', this.names);
        
         this.options = Object.assign({}, DEFAULT_OPTIONS, options)
 
@@ -52,16 +50,6 @@ export default class Table2Excel {
         this.plugins[func].forEach(handler => handler.call(this, this.pluginContext))
     }
 
-    cut(obj) {
-        obj.forEach(t => {
-            if (t.length > 31) {
-                t = t.slice(0, 30);
-            }
-            console.log(t);
-        });
-        console.log(obj);
-    }
-
     toExcel() {
         const { tables, options } = this
         const workbook = new ExcelJS.Workbook() // create workbook
@@ -77,7 +65,12 @@ export default class Table2Excel {
                 worksheet = workbook.addWorksheet(`Sheet ${index + 1}`);
                 //console.log('if: ', worksheet);
             } else {
-                worksheet = workbook.addWorksheet(this.names[index])
+                if (this.names[index].length > 31) {
+                    worksheet = workbook.addWorksheet(this.names[index].slice(0, 30))
+                } else {
+                    worksheet = workbook.addWorksheet(this.names[index])
+                }
+                
                 //console.log('else', worksheet);
             }
 
