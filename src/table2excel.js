@@ -33,10 +33,9 @@ export default class Table2Excel {
         names.forEach(t => {
             if (t.length > 31) {
                 arr.push = t.slice(0, 30);
+                this.names = arr;
             }
         });
-
-        this.names = arr;
 
         this.options = Object.assign({}, DEFAULT_OPTIONS, options)
 
