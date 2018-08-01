@@ -61,7 +61,7 @@ export default class Table2Excel {
 
         tables.forEach((table, index) => {
             let worksheet;
-            if (!this.names) {
+            if (!this.names || !this.names[index]) {
                 worksheet = workbook.addWorksheet(`Sheet ${index + 1}`);
                 //console.log('if: ', worksheet);
             } else {
