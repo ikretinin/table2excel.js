@@ -51,6 +51,7 @@ export default class Table2Excel {
     }
 
     toExcel() {
+        debugger;
         const { tables, options } = this
         const workbook = new ExcelJS.Workbook() // create workbook
 
