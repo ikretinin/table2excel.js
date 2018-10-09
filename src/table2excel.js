@@ -19,7 +19,7 @@ const DEFAULT_OPTIONS = {
 
 export default class Table2Excel {
 
-    
+
 
     constructor(selector = 'table', options = {}, names = []) {
         this.tables = Array.from(
@@ -29,7 +29,7 @@ export default class Table2Excel {
         )
 
         this.names = names;
-       
+
         this.options = Object.assign({}, DEFAULT_OPTIONS, options)
 
         // setup plugins
@@ -70,7 +70,7 @@ export default class Table2Excel {
                 } else {
                     worksheet = workbook.addWorksheet(this.names[index])
                 }
-                
+
                 //console.log('else', worksheet);
             }
 
@@ -156,7 +156,7 @@ export default class Table2Excel {
             const workcell = mergeCells(worksheet, colRange.from, rowRange.from, colRange.to, rowRange.to)
             const cellStyle = getComputedStyle(el)
 
-            workcell.value = innerText
+            workcell.value = this.isNumeric(innerText) ? parseFloat(innerText) : innerText
 
             // workcellCreated
             this._invokePlugin('workcellCreated', { workcell, cell: el, rowRange, colRange, cellStyle })
@@ -168,5 +168,9 @@ export default class Table2Excel {
             this.toExcel()
         }
         saveAsExcel(this.workbook, fileName, ext)
+    }
+
+    isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
     }
 }
