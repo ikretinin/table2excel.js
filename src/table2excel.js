@@ -50,112 +50,125 @@ export default class Table2Excel {
         this.plugins[func].forEach(handler => handler.call(this, this.pluginContext))
     }
 
-    toExcel () {
+    toExcel() {
         const { tables, options } = this
         const workbook = new ExcelJS.Workbook() // create workbook
-    
+
         Object.assign(workbook, options)
-    
+
         // workbookCreated plugins
         this._invokePlugin('workbookCreated', { workbook, tables })
-    
+
         tables.forEach((table, index) => {
-          const worksheet = workbook.addWorksheet(`Sheet ${index + 1}`)
-    
-          // worksheetCreated plugins
-          this._invokePlugin('worksheetCreated', { worksheet, table })
-    
-          this.toSheet(table, worksheet)
-    
-          // worksheetCompleted plugins
-          this._invokePlugin('worksheetCompleted', { worksheet, table })
+            let worksheet;
+            if (!this.names || !this.names[index]) {
+                worksheet = workbook.addWorksheet(`Sheet ${index + 1}`);
+                //console.log('if: ', worksheet);
+            } else {
+                if (this.names[index].length > 31) {
+                    worksheet = workbook.addWorksheet(this.names[index].slice(0, 30))
+                } else {
+                    worksheet = workbook.addWorksheet(this.names[index])
+                }
+
+                //console.log('else', worksheet);
+            }
+
+
+            // worksheetCreated plugins
+            this._invokePlugin('worksheetCreated', { worksheet, table })
+
+            this.toSheet(table, worksheet)
+
+            // worksheetCompleted plugins
+            this._invokePlugin('worksheetCompleted', { worksheet, table })
         })
-    
+
         return this.workbook = workbook
-      }
-    
-      toSheet (table, worksheet) {
+    }
+
+    toSheet(table, worksheet) {
         // get total cols and rows
         const totalRows = table.rows.length
         let totalCols = 0
-    
+
         if (table.rows.length > 0) {
-          for (let i = 0; i < table.rows[0].cells.length; i++) {
-            totalCols += table.rows[0].cells[i].colSpan
-          }
+            for (let i = 0; i < table.rows[0].cells.length; i++) {
+                totalCols += table.rows[0].cells[i].colSpan
+            }
         }
-    
+
         const cells = []
         Array.from(table.rows).forEach(row => {
-          Array.from(row.cells).forEach(cell => {
-            cells.push({
-              rowRange: {},
-              colRange: {},
-              el: cell
+            Array.from(row.cells).forEach(cell => {
+                cells.push({
+                    rowRange: {},
+                    colRange: {},
+                    el: cell
+                })
             })
-          })
         })
-    
+
         // create matrix
         const helperMatrix = []
-    
+
         for (let r = 0; r < totalRows; r++) {
-          const row = []
-          for (let c = 0; c < totalCols; c++) {
-            row.push({ cell: null })
-          }
-          helperMatrix.push(row)
+            const row = []
+            for (let c = 0; c < totalCols; c++) {
+                row.push({ cell: null })
+            }
+            helperMatrix.push(row)
         }
-    
-    
+
+
         // mark matrix
         let cursor = 0
-    
+
         for (let r = 0; r < totalRows; r++) {
-          for (let c = 0; c < totalCols; c++) {
-            // skip if current matrix unit is already assigned
-            if (helperMatrix[r][c].cell) {
-              continue
+            for (let c = 0; c < totalCols; c++) {
+                // skip if current matrix unit is already assigned
+                if (helperMatrix[r][c].cell) {
+                    continue
+                }
+
+                // assign cell to current matrix unit
+                const cell = cells[cursor++]
+                const { rowSpan, colSpan } = cell.el
+
+                cell.rowRange = { from: r, to: r }
+                cell.colRange = { from: c, to: c }
+
+                for (let y = r; y < r + rowSpan; y++) {
+                    for (let x = c; x < c + colSpan; x++) {
+                        helperMatrix[y][x].cell = cell
+                        cell.colRange.to = x
+                        cell.rowRange.to = y
+                    }
+                }
             }
-    
-            // assign cell to current matrix unit
-            const cell = cells[cursor++]
-            const { rowSpan, colSpan } = cell.el
-    
-            cell.rowRange = { from: r, to: r }
-            cell.colRange = { from: c, to: c }
-    
-            for (let y = r; y < r + rowSpan; y++) {
-              for (let x = c; x < c + colSpan; x++) {
-                helperMatrix[y][x].cell = cell
-                cell.colRange.to = x
-                cell.rowRange.to = y
-              }
-            }
-          }
         }
-    
-    
+
+
         // read matrix to sheet
         cells.forEach(cell => {
-          const { rowRange, colRange, el } = cell
-          const { innerText } = el
-          const workcell = mergeCells(worksheet, colRange.from, rowRange.from, colRange.to, rowRange.to)
-          const cellStyle = getComputedStyle(el)
-    
-          workcell.value = innerText
-    
-          // workcellCreated
-          this._invokePlugin('workcellCreated', { workcell, cell: el, rowRange, colRange, cellStyle })
+            const { rowRange, colRange, el } = cell
+            const { innerText } = el
+            const workcell = mergeCells(worksheet, colRange.from, rowRange.from, colRange.to, rowRange.to)
+            const cellStyle = getComputedStyle(el)
+
+            workcell.value = this.isNumeric(innerText) ? parseFloat(innerText) : innerText
+
+            // workcellCreated
+            this._invokePlugin('workcellCreated', { workcell, cell: el, rowRange, colRange, cellStyle })
         })
-      }
-    
-      export (fileName, ext) {
+    }
+
+    export(fileName, ext) {
         if (!this.workbook) {
-          this.toExcel()
+            this.toExcel()
         }
         saveAsExcel(this.workbook, fileName, ext)
-      }
+    }
 
     isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
