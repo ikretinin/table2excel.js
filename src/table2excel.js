@@ -157,7 +157,7 @@ export default class Table2Excel {
             const workcell = mergeCells(worksheet, colRange.from, rowRange.from, colRange.to, rowRange.to)
             const cellStyle = getComputedStyle(el)
 
-            workcell.value = this.isNumeric(innerText) ? parseFloat(innerText) : innerText
+            workcell.value = innerText
 
             // workcellCreated
             this._invokePlugin('workcellCreated', { workcell, cell: el, rowRange, colRange, cellStyle })
